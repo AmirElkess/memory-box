@@ -1,8 +1,34 @@
 import { IMemoryRepository } from "../../domain/repositories/IMemoryRepository";
 import { Memory, CreateMemoryDTO } from "../../domain/entities/Memory";
 
+const STORAGE_KEY = 'memories';
+
 export class InMemoryMemoryRepository implements IMemoryRepository {
   private memories: Memory[] = [];
+
+  constructor() {
+    this.loadFromStorage();
+  }
+
+  private loadFromStorage(): void {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        this.memories = JSON.parse(stored);
+      }
+    } catch (error) {
+      console.error('Failed to load memories from storage:', error);
+      this.memories = [];
+    }
+  }
+
+  private saveToStorage(): void {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.memories));
+    } catch (error) {
+      console.error('Failed to save memories to storage:', error);
+    }
+  }
 
   async getAll(): Promise<Memory[]> {
     return [...this.memories];
@@ -26,6 +52,7 @@ export class InMemoryMemoryRepository implements IMemoryRepository {
       comments: []
     };
     this.memories.unshift(memory);
+    this.saveToStorage();
     return memory;
   }
 
@@ -33,6 +60,7 @@ export class InMemoryMemoryRepository implements IMemoryRepository {
     const memory = this.memories.find(m => m.id === memoryId);
     if (!memory) throw new Error('Memory not found');
     memory.comments.push(comment);
+    this.saveToStorage();
     return memory;
   }
 }
