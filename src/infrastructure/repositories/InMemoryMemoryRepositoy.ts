@@ -2,24 +2,7 @@ import { IMemoryRepository } from "../../domain/repositories/IMemoryRepository";
 import { Memory, CreateMemoryDTO } from "../../domain/entities/Memory";
 
 export class InMemoryMemoryRepository implements IMemoryRepository {
-  private memories: Memory[] = [
-    {
-      id: 1,
-      text: 'First day at the new coffee shop downtown. The smell of freshly roasted beans and the warm sunlight made it perfect.',
-      sentiment: '☕',
-      date: '2024-01-15',
-      image: null,
-      comments: []
-    },
-    {
-      id: 2,
-      text: 'Beach sunset with friends. The sky was painted in shades of orange and pink.',
-      sentiment: '😊',
-      date: '2024-02-20',
-      image: null,
-      comments: ['Best evening ever!']
-    }
-  ];
+  private memories: Memory[] = [];
 
   async getAll(): Promise<Memory[]> {
     return [...this.memories];

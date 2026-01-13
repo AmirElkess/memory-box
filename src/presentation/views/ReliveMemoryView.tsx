@@ -40,9 +40,7 @@ export const ReliveMemoryView: React.FC<ReliveMemoryViewProps> = ({
             <div className="w-full h-64 bg-stone-100 rounded-lg" />
           )}
 
-          <p className="text-lg text-stone-700 leading-relaxed">
-            {memory.text}
-          </p>
+          <p className="text-stone-700" dangerouslySetInnerHTML={{ __html: memory.text }} />
 
           <CommentSection
             comments={memory.comments}

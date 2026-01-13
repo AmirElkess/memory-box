@@ -18,7 +18,7 @@ export const MemoryCard: React.FC<MemoryCardProps> = ({ memory, onClick }) => {
             <span className="text-2xl">{memory.sentiment}</span>
             <span className="text-xs text-stone-500">{memory.date}</span>
           </div>
-          <p className="text-stone-700 line-clamp-2">{memory.text}</p>
+          <p className="text-stone-700 line-clamp-3" dangerouslySetInnerHTML={{ __html: memory.text }} />
         </div>
       </div>
     </button>

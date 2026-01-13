@@ -1,6 +1,8 @@
 import { SentimentSelector } from "../components/SentimentSelector";
 import { X } from 'lucide-react';
 import { Sentiment } from "../../domain/entities/Sentiment";
+import { RichTextEditor } from '../components/RichTextEditor';
+
 
 interface CreateMemoryViewProps {
   text: string;
@@ -39,12 +41,17 @@ export const CreateMemoryView: React.FC<CreateMemoryViewProps> = ({
             <label className="block text-sm font-medium text-stone-700 mb-2">
               Memory
             </label>
-            <textarea
+            <RichTextEditor
+              value={text}
+              onChange={onTextChange}
+              placeholder="What would you like to remember?"
+            />
+            {/* <textarea
               value={text}
               onChange={(e) => onTextChange(e.target.value)}
               placeholder="What would you like to remember?"
               className="w-full h-40 p-4 border border-stone-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-amber-50/30"
-            />
+            /> */}
           </div>
 
           <div>
