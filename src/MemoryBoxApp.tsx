@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ReliveMemoryView } from './presentation/views/ReliveMemoryView';
 import { CreateMemoryView } from './presentation/views/CreateMemoryView';
-import { HomeView } from './presentation/views/HomeView'; 
+import { HomeView } from './presentation/views/HomeView';
 import { Memory, CreateMemoryDTO } from './domain/entities/Memory';
 import { InMemoryMemoryRepository } from './infrastructure/repositories/InMemoryMemoryRepositoy';
 import { CreateMemoryUseCase } from './application/usecases/CreateMemoryUseCase';
@@ -19,7 +19,7 @@ export default function MemoryBoxApp() {
   const [getRandomMemoryUseCase] = useState(() => new GetRandomMemoryUseCase(repository));
   const [getMemoryBySentimentUseCase] = useState(() => new GetMemoryBySentimentUseCase(repository));
   const [addCommentUseCase] = useState(() => new AddCommentUseCase(repository));
-  
+
   const [view, setView] = useState<View>('home');
   const [memories, setMemories] = useState<Memory[]>([]);
   const [selectedMemory, setSelectedMemory] = useState<Memory | null>(null);
@@ -30,14 +30,14 @@ export default function MemoryBoxApp() {
   });
   const [newComment, setNewComment] = useState('');
 
-  useEffect(() => {
-    loadMemories();
-  }, []);
-
-  const loadMemories = async () => {
+  const loadMemories = useCallback(async () => {
     const allMemories = await repository.getAll();
     setMemories(allMemories);
-  };
+  }, [repository]);
+
+  useEffect(() => {
+    loadMemories();
+  }, [loadMemories]);
 
   const handleCreateMemory = async () => {
     try {
@@ -68,7 +68,7 @@ export default function MemoryBoxApp() {
 
   const handleAddComment = async () => {
     if (!selectedMemory) return;
-    
+
     try {
       const updatedMemory = await addCommentUseCase.execute(selectedMemory.id, newComment);
       setSelectedMemory(updatedMemory);
